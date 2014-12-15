@@ -18,13 +18,13 @@ class VeerServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$this->registerInstallCommand($this->app);
+		
 		$this->registerVeerApp();
 		
 		$this->registerVeerQueryBuilder();
 		
 		$this->registerVeerShop();
-		
-		$this->registerVeerAdmin();
 	}
 	
 	/**
@@ -70,17 +70,7 @@ class VeerServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('veershop', function() { return new VeerShop; });
 	}
-		
-	/**
-	 * Register the Veer Admin
-	 *
-	 * @return void
-	 */	
-	public function registerVeerAdmin()
-	{
-		$this->app->bindShared('veeradmin', function() { return new VeerAdmin; });
-	}
-	
+			
 	/**
 	 * Get the services provided by the provider.
 	 *
@@ -88,7 +78,19 @@ class VeerServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('veer', 'veerdb', 'veershop', 'veeradmin');
+		return array('veer', 'veerdb', 'veershop', 'command.veer.install');
 	}	
+	
+	/**
+	 * 
+	 *
+	 * @return void
+	 */	
+    protected function registerInstallCommand($app)
+    {
+        $app['command.veer.install'] = $app->share(function ($app) {
+             return new \FirstThingCommand();
+        });
+    }	
 	
 }
