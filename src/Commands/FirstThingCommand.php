@@ -41,11 +41,11 @@ class FirstThingCommand extends Command {
 		$this->info('Veer is starting up...');
 		$this->info('');
 		
-		$this->call('veer:publish', array('config'));
+		$this->call('veer:publish', array('only' => 'config'));
 		
-		$this->call('veer:publish', array('views'));
+		$this->call('veer:publish', array('only' => 'views'));
 		
-		$this->call('veer:publish', array('assets'));
+		$this->call('veer:publish', array('only' => 'assets'));
 		
 		// Run migrations
 		if($this->option('migrate') == true) {
