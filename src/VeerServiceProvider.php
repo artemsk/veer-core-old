@@ -38,6 +38,7 @@ class VeerServiceProvider extends ServiceProvider {
 		if ( !($this->app->runningInConsole()) ) {
 			$this->app['veer']->run();	
 		}
+		$this->commands('command.veer.install');
 	}
 	
 	/**
