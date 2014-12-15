@@ -1,6 +1,8 @@
 {
     "name": "artemsk/veer-core",
-    "description": "",
+	"description": "The Veer Application Core.",
+	"keywords": ["cms", "veer", "laravel", "laravel-based", "laravel 4.1"],
+	"license": "MIT",	
     "authors": [
         {
             "name": "Artyom Troshin",
