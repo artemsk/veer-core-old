@@ -4,7 +4,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class publishVeerCommand extends Command {
+class PublishVeerCommand extends Command {
 
 	/**
 	 * The console command name.
@@ -20,6 +20,9 @@ class publishVeerCommand extends Command {
 	 */
 	protected $description = 'Publish all necessary files after install or update.';
 
+	
+	protected $packageName = "artemsk/veer-core";
+	
 	/**
 	 * Create a new command instance.
 	 *
@@ -41,12 +44,55 @@ class publishVeerCommand extends Command {
 		$this->info('Updating Veer...');
 		$this->info('');
 		
-		// Run migrations
-		if($this->option('only') == "views" || $this->option('only') == "") {
+		$source = base_path()."/vendor/".$this->packageName."/src";
+		
+		$only = $this->option('only');
+		
+		// Publish config
+		if($this->option('only') == "config" || empty($only)) {
+			
+			$this->info('- Publishing config.');
+
+			$destination = app_path()."/config";
+			
+			app('files')->copyDirectory($source."/config", $destination);
+		}
+		
+		// Publish views
+		if($this->option('only') == "views" || empty($only)) {
 			
 			$this->info('- Publishing views.');
 
+			$destination = app_path()."/views";
+			
+			app('files')->copyDirectory($source."/views", $destination);
 		}
+		
+		// Publish assets
+		if($this->option('only') == "assets" || empty($only)) {
+			
+			$this->info('- Publishing assets.');
+
+			$destination = public_path();
+			
+			app('files')->copyDirectory($source."/assets", $destination);
+		}		
+		
+		// Publish assets
+		if($this->option('only') == "migrations" || empty($only)) {
+			
+			$this->info('- Publishing migrations.');
+
+			$this->call('migrate:publish', array($this->packageName));
+			
+			// Run migrations
+			$this->info('- Run migrations.');
+			
+			$this->call('migrate');
+		}			
+		
+		$this->info('Done.');
+		$this->info('');
 	}
 
 	/**
