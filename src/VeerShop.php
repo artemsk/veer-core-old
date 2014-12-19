@@ -37,11 +37,12 @@ class VeerShop {
 	public function getPrice($product, $bypassUser = false)
 	{
 		$price = $this->calculator($product, $bypassUser);
+		$regular_price = $this->currency($product['price'], $product['currency']);
 		
-		if($product['price'] != $price) {
+		if($regular_price!= $price) {
 			return app('view')->make(app('veer')->loadedComponents['template'] . ".elements.price-discount")
 				->with('price', $this->priceFormat($price))
-				->with('regular_price', $this->priceFormat($product['price']));
+				->with('regular_price', $this->priceFormat($regular_price));
 		} else {
 			return app('view')->make(app('veer')->loadedComponents['template'] . ".elements.price-regular")->with('price', $this->priceFormat($price));
 		}
@@ -126,7 +127,7 @@ class VeerShop {
 				->where('users_id','=',app('auth')->id())
 				->where('status','=','active')
 				->whereNested(function($query) {
-					$query->whereRaw(" ( expires = '1' and (expiration_day >= '" . date('Y-m-d H:i:00', strtotime(Carbon::now())) . 
+					$query->whereRaw(" ( expires = '1' and (expiration_day >= '" . date('Y-m-d H:i:00', time()) . 
 						"' or expiration_times > '0') ) or ( expires = '0' ) ");
 				})
 				->orderBy('id')->select('discount')->remember(2)->first();	
