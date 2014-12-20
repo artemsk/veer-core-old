@@ -44,12 +44,10 @@ class FirstThingCommand extends Command {
 		//$this->call('veer:publish');
 		
 		// Run migrations
-		/*if($this->option('migrate') == true) {
+		if($this->option('migrate') == true) {
 			$this->info('- Setting up database & tables...');
-			$this->call('veer:publish', array('migrations'));
-		}*/
-		$this->info('- Setting up database & tables...');
-		$this->call('migrate');
+			$this->call('migrate');
+		}
 		
 		$this->info('');
 		$this->info('- Adding url to sites table...');
@@ -112,7 +110,7 @@ class FirstThingCommand extends Command {
 	protected function getOptions()
 	{
 		return array(
-			//array('migrate', null, InputOption::VALUE_NONE, 'Run migrations if you have not already done it.', null),
+			array('migrate', null, InputOption::VALUE_NONE, 'Run migrations if you have not already done it.', null),
 		);
 	}
 
